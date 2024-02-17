@@ -1,18 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
+import './App.css'; // Importa los estilos CSS
 import DialogflowChatbot from './DialogflowChatbot';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      
+
       <DialogflowChatbot />
     </div>
-    
   );
 }
 
