@@ -42,6 +42,7 @@ $(window).load(function() {
 
 });
 
+
 function updateScrollbar() {
   $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
     scrollInertia: 10,
