@@ -10,33 +10,33 @@ try {
   var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   var recognition = new SpeechRecognition();
 }
-catch(e) {
+catch (e) {
   console.error(e);
   $('.no-browser-support').show();
 }
 
-$('#start-record-btn').on('click', function(e) {
+$('#start-record-btn').on('click', function (e) {
   recognition.start();
 });
 
 recognition.onresult = (event) => {
   const speechToText = event.results[0][0].transcript;
- document.getElementById("MSG").value= speechToText;
+  document.getElementById("MSG").value = speechToText;
   //console.log(speechToText)
   insertMessage()
 }
 
 
-function listendom(no){
+function listendom(no) {
   console.log(no)
   //console.log(document.getElementById(no))
-document.getElementById("MSG").value= no.innerHTML;
+  document.getElementById("MSG").value = no.innerHTML;
   insertMessage();
 }
 
-$(window).load(function() {
+$(window).load(function () {
   $messages.mCustomScrollbar();
-  setTimeout(function() {
+  setTimeout(function () {
     serverMessage("Hola soy tu doc, te puedo ayudar?");
   }, 100);
 
@@ -59,15 +59,15 @@ function insertMessage() {
     return false;
   }
   $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
-   fetchmsg() 
-  
+  fetchmsg()
+
   $('.message-input').val(null);
   updateScrollbar();
 
 }
 
-document.getElementById("mymsg").onsubmit = (e)=>{
-  e.preventDefault() 
+document.getElementById("mymsg").onsubmit = (e) => {
+  e.preventDefault()
   insertMessage();
 }
 
@@ -79,9 +79,9 @@ function serverMessage(response2) {
   }
   $('<div class="message loading new"><figure class="avatar"><img src="css/bot.png" /></figure><span></span></div>').appendTo($('.mCSB_container'));
   updateScrollbar();
-  
 
-  setTimeout(function() {
+
+  setTimeout(function () {
     $('.message.loading').remove();
     $('<div class="message new"><figure class="avatar"><img src="css/bot.png" /></figure>' + response2 + '</div>').appendTo($('.mCSB_container')).addClass('new');
     updateScrollbar();
@@ -89,30 +89,29 @@ function serverMessage(response2) {
 
 }
 
+function fetchmsg() {
+  //Change to localhost by ip
+  var url = 'http://localhost:5000/send-msg';
 
-function fetchmsg(){
+  const data = new URLSearchParams();
+  for (const pair of new FormData(document.getElementById("mymsg"))) {
+    data.append(pair[0], pair[1]);
+    console.log(pair)
+  }
 
-     var url = 'http://localhost:5000/send-msg';
-      
-      const data = new URLSearchParams();
-      for (const pair of new FormData(document.getElementById("mymsg"))) {
-          data.append(pair[0], pair[1]);
-          console.log(pair)
-      }
-    
-      console.log("abc",data)
-        fetch(url, {
-          method: 'POST',
-          body:data
-        }).then(res => res.json())
-         .then(response => {
-          console.log(response);
-          serverMessage(response.Reply);
-          speechSynthesis.speak( new SpeechSynthesisUtterance(response.Reply))
-        
-          
-         })
-          .catch(error => console.error('Error h:', error));
+  console.log("abc", data)
+  fetch(url, {
+    method: 'POST',
+    body: data
+  }).then(res => res.json())
+    .then(response => {
+      console.log(response);
+      serverMessage(response.Reply);
+      speechSynthesis.speak(new SpeechSynthesisUtterance(response.Reply))
+
+
+    })
+    .catch(error => console.error('Error h:', error));
 
 }
 
